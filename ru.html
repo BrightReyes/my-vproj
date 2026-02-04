@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MyVproject</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Playfair+Display:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    body {
+      margin: 0;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: linear-gradient(rgba(255,192,203,0.3), rgba(255,192,203,0.3)),
+                  url('bg.jpg');
+      background-size: cover;
+      background-position: center;
+    }
+
+    .card-container {
+      position: relative;
+      width: 320px;
+      height: 400px;
+      cursor: pointer;
+      perspective: 1000px;
+    }
+
+    .card-flip {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      transition: transform 0.8s;
+      transform-style: preserve-3d;
+    }
+
+    .card-container.flipped .card-flip {
+      transform: rotateY(180deg);
+    }
+
+    .card-front,
+    .card-back {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      backface-visibility: hidden;
+      border-radius: 20px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 30px;
+    }
+
+    .card-front {
+      background: linear-gradient(135deg, #f8b4c6 0%, #f29ab2 100%);
+      color: white;
+    }
+
+    .card-front h2 {
+      font-size: 28px;
+      margin: 20px 0;
+      text-align: center;
+      font-family: 'Playfair Display', serif;
+    }
+
+    .card-front .heart {
+      font-size: 60px;
+      animation: heartbeat 1.5s ease-in-out infinite;
+    }
+
+    @keyframes heartbeat {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.1); }
+    }
+
+    .card-back {
+      background: white;
+      transform: rotateY(180deg);
+      color: #333;
+    }
+
+    .card-back h1 {
+      color: #e75480;
+      margin: 10px 0;
+      font-size: 32px;
+      font-weight: 700;
+      font-family: 'Playfair Display', serif;
+      text-align: center;
+    }
+
+    .card-back p {
+      color: #555;
+      font-size: 15px;
+      margin-bottom: 20px;
+    }
+
+    .hint {
+      position: absolute;
+      top: -50px;
+      width: 100%;
+      text-align: center;
+      color: #fff;
+      font-size: 18px;
+      font-weight: 600;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+      font-family: 'Poppins', sans-serif;
+    }
+
+    .buttons {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+      align-items: center;
+      margin-top: 20px;
+      position: relative;
+    }
+
+    .btn {
+      padding: 12px 30px;
+      border: none;
+      border-radius: 25px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    .btn-yes {
+      background: #e75480;
+      color: white;
+      position: relative;
+      z-index: 10;
+    }
+
+    .btn-yes:hover {
+      background: #d14070;
+      transform: scale(1.05);
+    }
+
+    .btn-no {
+      background: #f0f0f0;
+      color: #555;
+      position: relative;
+      transition: all 0.2s ease;
+    }
+
+    .btn-no:hover {
+      background: #e0e0e0;
+    }
+
+    .response {
+      margin-top: 15px;
+      font-size: 32px;
+      font-weight: 600;
+      color: #e75480;
+      display: none;
+      font-family: 'Playfair Display', serif;
+      text-align: center;
+    }
+
+    .location-section {
+      display: none;
+      margin-top: 15px;
+      width: 100%;
+    }
+
+    .location-section h3 {
+      color: #e75480;
+      font-size: 18px;
+      margin-bottom: 10px;
+      font-family: 'Playfair Display', serif;
+    }
+
+    .location-options {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .location-btn {
+      padding: 10px 20px;
+      border: 2px solid #e75480;
+      background: white;
+      color: #e75480;
+      border-radius: 20px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    .location-btn:hover {
+      background: #e75480;
+      color: white;
+      transform: scale(1.05);
+    }
+
+    .final-message {
+      display: none;
+      margin-top: 15px;
+      font-size: 16px;
+      color: #e75480;
+      text-align: center;
+      line-height: 1.5;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    .valentine-question {
+      transition: opacity 0.3s ease;
+    }
+
+    .hide-question .valentine-question {
+      display: none;
+    }
+
+    .hide-question .location-section {
+      margin-top: 0;
+    }
+
+    .card-container.vanish {
+      animation: vanishCard 0.6s ease forwards;
+    }
+
+    @keyframes vanishCard {
+      0% {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+      }
+      100% {
+        opacity: 0;
+        transform: scale(0.8) translateY(-50px);
+      }
+    }
+
+    .location-card {
+      position: absolute;
+      width: 320px;
+      height: 400px;
+      background: white;
+      border-radius: 20px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+      display: none;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 30px;
+      opacity: 0;
+      transform: scale(0.8) translateY(50px);
+    }
+
+    .location-card.show {
+      display: flex;
+      animation: appearCard 0.6s ease forwards 0.3s;
+    }
+
+    @keyframes appearCard {
+      0% {
+        opacity: 0;
+        transform: scale(0.8) translateY(50px);
+      }
+      100% {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+      }
+    }
+
+    .location-card h2 {
+      color: #e75480;
+      font-size: 24px;
+      margin-bottom: 20px;
+      font-family: 'Playfair Display', serif;
+    }
+
+    .heart-container {
+      display: none;
+      margin-top: 20px;
+      width: 150px;
+      height: 150px;
+      overflow: hidden;
+      border-radius: 10px;
+    }
+
+    .heart-container img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .heart-container-response {
+      display: none;
+      margin: 20px auto 0 auto;
+      width: 150px;
+      height: 150px;
+      overflow: hidden;
+      border-radius: 10px;
+    }
+
+    .heart-container-response img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+  </style>
+</head>
+<body>
+  <div class="card-container" id="card">
+    <div class="hint">Click the card 💌</div>
+    <div class="card-flip">
+      <div class="card-front">
+        <div class="heart">💕</div>
+        <h2>A Special Question<br/>For You my Baby...</h2>
+      </div>
+      <div class="card-back">
+        <div class="valentine-question">
+          <h1>   Will You Be </h1>
+          <h1>My Valentine?</h1>
+          <p>
+            SUBUKAN MO TALAGANG MAG NO!
+          </p>
+          <div class="buttons">
+            <button class="btn btn-yes" onclick="handleResponse('yes')">Yes! 💕</button>
+            <button class="btn btn-no" id="noBtn" onmouseenter="avoidButton()" onclick="handleResponse('no')">No 💔</button>
+          </div>
+          <div class="response" id="response"></div>
+          <div class="heart-container-response" id="heartContainerResponse">
+            <img src="suki.jpg" alt="Heart">
+          </div>
+        </div>
+        <div class="location-section" id="locationSection">
+          <h3>Where do you wanna go? 😊</h3>
+          <div class="location-options">
+            <button class="location-btn" onclick="selectLocation('dinner')">Romantic Dinner 🍴</button>
+            <button class="location-btn" onclick="selectLocation('movie')">Movie Date 🎬</button>
+            <button class="location-btn" onclick="selectLocation('walk')">Sunset Walk 🌅</button>
+            <button class="location-btn" onclick="selectLocation('surprise')">Surprise Me! 🎁</button>
+          </div>
+        </div>
+        <div class="final-message" id="finalMessage"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="location-card" id="locationCard">
+    <h2>Where do you wanna go my love? 😊</h2>
+    <div class="location-options">
+      <button class="location-btn" onclick="selectLocation('dinner')">Chill Cafe ☕</button>
+      <button class="location-btn" onclick="selectLocation('movie')">Chill Mall gala 🍽️</button>
+      <button class="location-btn" onclick="selectLocation('walk')">MOA Sunset🌅</button>
+      <button class="location-btn" onclick="selectLocation('surprise')">Freaky typeshi 😜</button>
+    </div>
+    <div class="final-message" id="finalMessage2"></div>
+    <div class="heart-container" id="heartContainer">
+      <img src="heart.jpg" alt="Heart">
+    </div>
+    <div class="signature" id="signature" style="display: none; text-align: right; margin-top: 15px; font-style: italic; color: #e75480; width: 100%;">-Love Hazy</div>
+  </div>
+
+  <script>
+    const card = document.getElementById('card');
+    const cardBack = document.querySelector('.card-back');
+    const hint = document.querySelector('.hint');
+
+    card.addEventListener('click', (e) => {
+      // Don't toggle if clicking on buttons
+      if (e.target.closest('.btn') || e.target.closest('.location-btn')) {
+        return;
+      }
+      card.classList.toggle('flipped');
+      
+      // Hide hint after first click
+      if (hint) {
+        hint.style.display = 'none';
+      }
+    });
+
+    function avoidButton() {
+      const noBtn = document.getElementById('noBtn');
+      const yesBtn = document.querySelector('.btn-yes');
+      const buttonsContainer = document.querySelector('.buttons');
+      
+      if (!yesBtn || !buttonsContainer) return;
+      
+      const yesRect = yesBtn.getBoundingClientRect();
+      const containerRect = buttonsContainer.getBoundingClientRect();
+      
+      let randomX, randomY;
+      let attempts = 0;
+      let isOverlapping = true;
+      
+      // Try to find a position that doesn't overlap with Yes button
+      while (isOverlapping && attempts < 20) {
+        randomX = Math.floor(Math.random() * 150) - 75;
+        randomY = Math.floor(Math.random() * 100) - 50;
+        
+        // Check if this position would overlap with Yes button
+        // If moving too close to the left (where Yes button is), try again
+        if (Math.abs(randomX) < 80 && Math.abs(randomY) < 30) {
+          attempts++;
+          continue;
+        }
+        
+        isOverlapping = false;
+      }
+      
+      noBtn.style.position = 'absolute';
+      noBtn.style.transform = `translate(${randomX}px, ${randomY}px)`;
+    }
+
+    function handleResponse(answer) {
+      const responseDiv = document.getElementById('response');
+      const buttons = document.querySelector('.buttons');
+      const locationCard = document.getElementById('locationCard');
+      const valentineQuestion = document.querySelector('.valentine-question h1');
+      const valentineText = document.querySelector('.valentine-question p');
+      const heartContainerResponse = document.getElementById('heartContainerResponse');
+      
+      if (answer === 'yes') {
+        responseDiv.textContent = 'I LOVE YOU!!🥰';
+        responseDiv.style.color = '#e75480';
+        responseDiv.style.display = 'block';
+        buttons.style.display = 'none';
+        
+        // Show heart image below the message
+        if (heartContainerResponse) {
+          heartContainerResponse.style.display = 'block';
+        }
+        
+        // Hide the Valentine question text
+        const allH1 = document.querySelectorAll('.valentine-question h1');
+        allH1.forEach(h1 => h1.style.display = 'none');
+        if (valentineText) valentineText.style.display = 'none';
+        
+        // Vanish current card and show location card
+        setTimeout(() => {
+          card.classList.add('vanish');
+          
+          setTimeout(() => {
+            locationCard.classList.add('show');
+          }, 300);
+        }, 1000);
+      }
+    }
+
+    function selectLocation(place) {
+      const locationOptions = document.querySelector('.location-card .location-options');
+      const finalMessage = document.getElementById('finalMessage2');
+      const heading = document.querySelector('.location-card h2');
+      const heartContainer = document.getElementById('heartContainer');
+      const signature = document.getElementById('signature');
+      
+      const messages = {
+        'dinner': "Alrighty, matcha girly☕",
+        'movie': "Bunutan para fair katulad sa tiktok, I love you",
+        'walk': "Sunset + Yap no, sounds fun ❤️🌅",
+        'surprise': "Ooh, I love that! alam mo ah HAHAHAHHAHAHAHAHAH🤤 "
+      };
+      
+      if (heading) heading.style.display = 'none';
+      if (locationOptions) locationOptions.style.display = 'none';
+      finalMessage.textContent = messages[place];
+      finalMessage.style.display = 'block';
+      heartContainer.style.display = 'block';
+      if (signature) signature.style.display = 'block';
+    }
+  </script>
+</body>
+</html>
